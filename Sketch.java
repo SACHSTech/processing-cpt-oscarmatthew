@@ -38,15 +38,17 @@ float fltPlayerTwoY = 500;
    * Called repeatedly, anything drawn to the screen goes here
    */
   public void draw() {
-    background(0);
+    background(111);
     
 
     // create input for player one 
       if (upPressed) {
         fltPlayerOneY -= 2;
+        rect(fltPlayerOneX+15, fltPlayerOneY+15, 10, 50);
       } 
       if (downPressed) {
         fltPlayerOneY += 2;
+        rect(fltPlayerOneX+15, fltPlayerOneY-25, 10, 50);
       } 
       if(leftPressed){
         fltPlayerOneX -= 2;
@@ -72,6 +74,22 @@ float fltPlayerTwoY = 500;
       }
       fill(0, 255, 0);
       rect(fltPlayerTwoX, fltPlayerTwoY, 40, 40);
+
+
+      // create map boundry 
+      fill(222);
+      rect(100, 0, 20, 200);
+      if (fltPlayerOneX < 120){
+        fltPlayerOneX -= 5;
+      }
+
+      if (fltPlayerOneX < 20) {
+        fltPlayerOneX += 10;
+      }
+      else if (fltPlayerOneX > 1000) {
+        fltPlayerOneX = 1000;
+      }
+
 
       }
 
@@ -106,8 +124,8 @@ float fltPlayerTwoY = 500;
       }
 
       // player 1 boundries
-      if (fltPlayerOneX < 0) {
-        fltPlayerOneX = 0;
+      if (fltPlayerOneX < 20) {
+        fltPlayerOneX += 10;
       }
       else if (fltPlayerOneX > 1000) {
         fltPlayerOneX = 1000;
@@ -131,6 +149,7 @@ float fltPlayerTwoY = 500;
       else if (fltPlayerTwoY > 700) {
         fltPlayerTwoY = 700;
       }
+      fill(255);
     }
 
     public void keyReleased() {
