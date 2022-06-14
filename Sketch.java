@@ -1,4 +1,5 @@
 import processing.core.PApplet;
+import processing.core.PImage;
 
 public class Sketch extends PApplet {
 	  
@@ -6,6 +7,9 @@ boolean upPressed = false;
 boolean downPressed = false;
 boolean leftPressed = false;
 boolean rightPressed = false;
+boolean fireOne = false;
+boolean fireTwo = false;
+
 
 boolean upPressedTwo = false;
 boolean downPressedTwo = false;
@@ -32,49 +36,78 @@ float fltPlayerTwoY = 500;
    */
   public void setup() {
     background(210, 255, 173);
+
   }
 
   /**
    * Called repeatedly, anything drawn to the screen goes here
    */
   public void draw() {
-    background(0);
+    background(111);
     
+    PImage spritsheet = loadImage("spritesheet.png");
+    PImage missle = loadImage("missle.png");
 
     // create input for player one 
       if (upPressed) {
-        fltPlayerOneY -= 2;
+        fltPlayerOneY -= 1.5;
       } 
       if (downPressed) {
-        fltPlayerOneY += 2;
+        fltPlayerOneY += 1.5;
       } 
-      if(leftPressed){
-        fltPlayerOneX -= 2;
+      if (leftPressed){
+        fltPlayerOneX -= 1.5;
       }
-      if(rightPressed){
-      fltPlayerOneX += 2; 
+      if (rightPressed){
+      fltPlayerOneX += 1.5; 
       }
-      fill(255, 0, 0);
-      rect(fltPlayerOneX, fltPlayerOneY, 40, 40);
-
+      if (fireOne) {
+        PImage imgMissile;
+        imgMissile = missle.get(375, 150, 100, 300);
+        imgMissile.resize(15, 40);
+        image(imgMissile, fltPlayerOneX + 42, fltPlayerOneY + 100);
+      }
+      PImage imgTankOne;
+      imgTankOne = spritsheet.get(350, 119, 100, 140);
+      imgTankOne.resize(100, 125);
+      image(imgTankOne, fltPlayerOneX, fltPlayerOneY);
+      
     // player two input 
       if (upPressedTwo) {
-        fltPlayerTwoY-=2;
+        fltPlayerTwoY -= 1.5;
       } 
       if (downPressedTwo) {
-        fltPlayerTwoY+=2;
+        fltPlayerTwoY += 1.5;
       } 
       if(leftPressedTwo) {
-        fltPlayerTwoX-=2;
+        fltPlayerTwoX -= 1.5;
       }
       if(rightPressedTwo) {
-        fltPlayerTwoX+=2; 
+        fltPlayerTwoX += 1.5; 
       }
-      fill(0, 255, 0);
-      rect(fltPlayerTwoX, fltPlayerTwoY, 40, 40);
-
+      if (fireTwo) {
+        PImage imgMissile;
+        imgMissile = missle.get(375, 150, 100, 300);
+        imgMissile.resize(15, 40);
+        image(imgMissile, fltPlayerTwoX + 27, fltPlayerTwoY + 100);
       }
+      PImage imgTankTwo;
+      imgTankTwo = spritsheet.get(120, 110, 100, 140);
+      imgTankTwo.resize(100, 125);
+      image(imgTankTwo, fltPlayerTwoX, fltPlayerTwoY);
 
+
+      // create map boundry 
+      fill(222);
+      rect(450, 450, 100, 20);
+      if (fltPlayerOneX > 410 && fltPlayerOneX < 550 && fltPlayerOneY > 410 && fltPlayerOneY < 470) {
+          fltPlayerOneX -= 10;
+        
+      }
+      if (fltPlayerOneX == fltPlayerTwoX - 40 && fltPlayerOneY == fltPlayerTwoY) {
+        fltPlayerOneX -= 5;
+      }
+      }
   
     public void keyPressed() { 
       // player two booleans
@@ -90,6 +123,9 @@ float fltPlayerTwoY = 500;
       else if (keyCode == RIGHT) {
         rightPressedTwo = true;
       }
+      else if (keyCode == ENTER) {
+        fireOne = true;
+      }
 
       // player one booleans 
       if (key == 'w') {
@@ -104,10 +140,13 @@ float fltPlayerTwoY = 500;
       else if (key == 'd') {
         rightPressed = true;
       }
+      else if (key == ' ') {
+        fireTwo = true;
+      }
 
       // player 1 boundries
-      if (fltPlayerOneX < 0) {
-        fltPlayerOneX = 0;
+      if (fltPlayerOneX < 40) {
+        fltPlayerOneX += 10;
       }
       else if (fltPlayerOneX > 1000) {
         fltPlayerOneX = 1000;
@@ -148,6 +187,9 @@ float fltPlayerTwoY = 500;
         else if (keyCode == RIGHT) {
           rightPressedTwo = false;
         }
+        else if (key == ' ') {
+          fireTwo = false;
+        }
 
         // player one booleans 
         if (key == 'w') {
@@ -161,6 +203,9 @@ float fltPlayerTwoY = 500;
         }
         else if (key == 'd') {
           rightPressed = false;
+        }
+        else if (keyCode == ENTER) {
+          fireOne = false;
         }
       }
     }
