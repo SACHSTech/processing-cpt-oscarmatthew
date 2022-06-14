@@ -170,6 +170,7 @@ float fltPlayerTwoY = 500;
       else if (fltPlayerTwoY > 700) {
         fltPlayerTwoY = 700;
       }
+      fill(255);
     }
 
     public void keyReleased() {
