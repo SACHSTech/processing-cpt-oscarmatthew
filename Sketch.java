@@ -1,27 +1,45 @@
 import processing.core.PApplet;
 import processing.core.PImage;
+import java.awt.Graphics2D;
 
 public class Sketch extends PApplet {
-	  
+
+// booleans for keyboard input 
 boolean upPressed = false;
 boolean downPressed = false;
 boolean leftPressed = false;
 boolean rightPressed = false;
-boolean fireOne = false;
-boolean fireTwo = false;
 
 boolean upPressedTwo = false;
 boolean downPressedTwo = false;
 boolean leftPressedTwo = false;
 boolean rightPressedTwo = false;
 
+boolean fireOne = false;
+boolean fireTwo = false;
+
+// variables for player location 
 float fltPlayerOneX = 150;
 float fltPlayerOneY = 150;
-
 float fltPlayerTwoX = 500;
 float fltPlayerTwoY = 500;
+float fltTankSpeedX = 2;
+float fltTankSpeedY = 2;
+float freeze = 0;
+
+float fltTankWidth = 75;
+float fltTankHeight = 85;
 
 boolean gameStatus = false;
+
+// imaged variables 
+PImage imgTankOne;
+PImage imgMissile;
+PImage imgTankTwo;
+PImage imgBackground;
+
+float angleOne = 0;
+float agnleTwo = 0;
 
 public void settings() {
 	// put your size call here
@@ -30,111 +48,96 @@ public void settings() {
 
   public void setup() {
     background(210, 255, 173);
+
+    PImage spritsheet = loadImage("spritesheet.png");
+    PImage desertBackground = loadImage("desert.jpeg");
+    PImage missle = loadImage("missle.png");
+
+    imgBackground = desertBackground.get(0,0,1000,700);
+
+    imgTankOne = spritsheet.get(350, 119, 100, 140);
+    imgTankOne.resize(100, 125);
+    imgMissile = missle.get(375, 150, 100, 300);
+    imgMissile.resize(15, 40);
+
+    imgTankTwo = spritsheet.get(120, 110, 100, 140);
+    imgTankTwo.resize(100, 125);
+    imgMissile = missle.get(375, 150, 100, 300);
+    imgMissile.resize(15, 40);
   }
 
   public void draw() {
     // load background 
-    PImage desertBackground = loadImage("desert.jpeg");
-    image(desertBackground, 0, 0);
 
-    PImage spritsheet = loadImage("spritesheet.png");
+    image(imgBackground, 0, 0);
 
-    PImage missle = loadImage("missle.png");
 
     //if (gameStatus == true) {    
     // create input for player one 
       if (upPressed) {
-        fltPlayerOneY -= 1.75;
+        fltPlayerOneY -= fltTankSpeedY;
       } 
       if (downPressed) {
-        fltPlayerOneY += 1.75;
+        fltPlayerOneY += fltTankSpeedY;
       } 
       if (leftPressed){
-        fltPlayerOneX -= 1.75;
+
+        fltPlayerOneX -= fltTankSpeedX;
       }
       if (rightPressed){
-      fltPlayerOneX += 1.75; 
+        fltTankSpeedX = 2;
+        fltPlayerOneX += fltTankSpeedX; 
       }
       if (fireOne) {
-        PImage imgMissile;
-        imgMissile = missle.get(375, 150, 100, 300);
-        imgMissile.resize(15, 40);
+        for (int i = 0; i < 1; i++) {
         image(imgMissile, fltPlayerOneX + 42, fltPlayerOneY + 100);
+        }
       }
-      PImage imgTankOne;
-      imgTankOne = spritsheet.get(350, 119, 100, 140);
-      imgTankOne.resize(100, 125);
       image(imgTankOne, fltPlayerOneX, fltPlayerOneY);
-
 
     // player two input 
       if (upPressedTwo) {
-        fltPlayerTwoY -= 1.75;
+        fltPlayerTwoY -= fltTankSpeedY;
       } 
       if (downPressedTwo) {
-        fltPlayerTwoY += 1.75;
+        fltPlayerTwoY += fltTankSpeedY;
       } 
       if(leftPressedTwo) {
-        fltPlayerTwoX -= 1.75;
+        fltPlayerTwoX -= fltTankSpeedX;
       }
       if(rightPressedTwo) {
-        fltPlayerTwoX += 1.75; 
+        fltPlayerTwoX += fltTankSpeedX;
       }
       if (fireTwo) {
-        PImage imgMissile;
-        imgMissile = missle.get(375, 150, 100, 300);
-        imgMissile.resize(15, 40);
-        image(imgMissile, fltPlayerTwoX + 27, fltPlayerTwoY + 100);
+      image(imgMissile, fltPlayerTwoX + 27, fltPlayerTwoY + 100);
       }
-      PImage imgTankTwo;
-      imgTankTwo = spritsheet.get(120, 110, 100, 140);
-      imgTankTwo.resize(100, 125);
       image(imgTankTwo, fltPlayerTwoX, fltPlayerTwoY);
-
 
       // create map boundry 
       fill(222);
       rect(450, 450, 100, 20);
       if (fltPlayerOneX > 410 && fltPlayerOneX < 550 && fltPlayerOneY > 410 && fltPlayerOneY < 470) {
           fltPlayerOneX -= 10;
-        
       }
       if (fltPlayerOneX == fltPlayerTwoX - 40 && fltPlayerOneY == fltPlayerTwoY) {
         fltPlayerOneX -= 5;
       }
       }
-   // }
-  
+
     public void keyPressed() { 
-      PImage spritsheet = loadImage("spritesheet.png");
-      PImage missle = loadImage("missle.png");
-      PImage imgTankOne;
-      PImage imgMissile;
 
       // player two booleans
       if (keyCode == UP) {
         upPressedTwo = true;
-      imgTankOne = spritsheet.get(20, 7, 100, 130);
-      imgTankOne.resize(100, 125);
-      image(imgTankOne, fltPlayerTwoX, fltPlayerTwoY);
       }
       else if (keyCode == DOWN) {
         downPressedTwo = true;
-        imgTankOne = spritsheet.get(120, 110, 100, 140);
-        imgTankOne.resize(100, 125);
-        image(imgTankOne, fltPlayerTwoX, fltPlayerTwoY);
       }
       else if (keyCode == LEFT) {
         leftPressedTwo = true;
-        imgTankOne = spritsheet.get(20, 120, 100, 100);
-        imgTankOne.resize(110, 90);
-        image(imgTankOne, fltPlayerTwoX - 25, fltPlayerTwoY);
       }
       else if (keyCode == RIGHT) {
         rightPressedTwo = true;
-        imgTankOne = spritsheet.get(115, 20, 100, 100);
-        imgTankOne.resize(110, 90);
-        image(imgTankOne, fltPlayerTwoX - 5, fltPlayerTwoY);
       }
       else if (key == ' ') {
         fireOne = true;
@@ -159,38 +162,46 @@ public void settings() {
 
       // player 1 boundries
       if (fltPlayerOneX < -10) {
-        fltPlayerOneX = -9;
+        fltTankSpeedX = 0;
+        fltPlayerOneX = fltTankSpeedX;
       }
-      else if (fltPlayerOneX > 1000) {
-        fltPlayerOneX = 1000;
+      else if (fltPlayerOneX > 920) {
+        fltTankSpeedX = 0;
+        fltPlayerOneX = 900;
       }
-      if (fltPlayerOneY < 0) {
+      if (fltPlayerOneY < -10) {
         fltPlayerOneY = 0;
       }
-      else if (fltPlayerOneY > 700) {
-        fltPlayerOneY = 700;
+      else if (fltPlayerOneY > 610) {
+        fltPlayerOneY = 580;
       }
       // player 2 boundries
       if (fltPlayerTwoX < -10) {
         fltPlayerTwoX = -9;
       }
-      else if (fltPlayerTwoX > 1000) {
-        fltPlayerTwoX = 1000;
+      else if (fltPlayerTwoX > 940) {
+        fltPlayerTwoX = 930;
       }
       if (fltPlayerTwoY < 0) {
         fltPlayerTwoY = 0;
       }
-      else if (fltPlayerTwoY > 700) {
-        fltPlayerTwoY = 700;
+      else if (fltPlayerTwoY > 610) {
+        fltPlayerTwoY = 580;
       }
-      fill(255);
+      // tank collision 
+      if (fltPlayerOneX == fltPlayerTwoX) {
+        fltTankSpeedX = 0;
+        fltPlayerOneX += fltTankSpeedX;
+      }
+      else {
+        fltTankSpeedX = 2;
+      }
     }
 
     public void keyReleased() {
       // player two booleans 
         if (keyCode == UP) {
-          upPressedTwo = false;
-
+          upPressedTwo = false; 
         }
         else if (keyCode == DOWN) {
           downPressedTwo = false;
@@ -222,6 +233,10 @@ public void settings() {
         else if (key == ' ') {
           fireOne = false;
         }
+      }
+      
+      public void tankCollision() {
+        
       }
     }
 
