@@ -2,3 +2,5 @@
 # Program Title (edit this)
 
 Put your program description here.
+
+The objective of our game is to shoot the enemy tank on the other side of the screen. The screen is split into 2 halves: player 1 on the left player 2 on the right. Each player has 3 lives and the goal is to blow up the other tank before they kill you. Each tank can shoot missiles to the other side in an attempt to blow up the tank. The players will both play on the same keyboard. Player 1 uses WASD for movement and spacebar to shoot. Player 2 uses arrow keys to move and enter to shoot. There is no score but you can win by taking all 3 lives from your enemy resulting in an end screen where you are prompted as to which player won the game. The end screen will display the number of whichever player has won. One limitation is that you can not play by yourself as we have not coded a single-player mode. We are also limited to only 2 players as we haven't added any more inputs. So optimally grab 1 friend to play with. Only 1 bullet can be shot at a time per player. Players are within limited boundaries and the left side of the map is reserved for player 1 while the right for player 2. 
