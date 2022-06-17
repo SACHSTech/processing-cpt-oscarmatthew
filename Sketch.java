@@ -21,6 +21,8 @@ public class Sketch extends PApplet {
   boolean fireOne = false;
   boolean fireTwo = false;
 
+  boolean[] hideMissle = new boolean[25];
+
   // variables for player location 
   float fltPlayerOneX = 105;
   float fltPlayerOneY = 105;
@@ -31,18 +33,17 @@ public class Sketch extends PApplet {
   float fltPlayerOneLives = 3;
   float fltPlayerTwoLives = 3;
 
-
   // missle coordinates
   float missleXOne = fltPlayerOneX;
   float missleYOne = fltPlayerOneY;
   float missleXTwo = fltPlayerTwoX;
   float missleYTwo = fltPlayerTwoY;
 
+  // tank and missle sizes 
   float fltTankOneWidth = 85;
   float fltTankeOneHeight = 72;
   float fltTankTwoWidth = 85;
   float fltTankeTWoHeight = 72;
-
   float fltMissleHeight = 25;
   float fltMissleWidth = 75;
 
@@ -55,14 +56,12 @@ public class Sketch extends PApplet {
   PImage imgTankTwo;
   PImage imgBackground;
 
-  float angleOne = 0;
-  float agnleTwo = 0;
-
   public void settings() {
 	  // put your size call here
       size(1000, 750);
   }
 
+  /**call images and get their sizes */
   public void setup() {
     background(210, 255, 173);
 
@@ -82,12 +81,15 @@ public class Sketch extends PApplet {
     imgMissileLeft.resize(150, 75);
 
     // load font style
-    font = createFont("pixel.ttf", 10);
-    textFont(font);
+    //font = createFont("pixel.ttf", 10); // comment this out if font is not able to load (worked for my MacOS but did not work for my Windows 10 PC)
+    //textFont(font); // comment this out if font is not able to load 
   }
 
   public void draw() {
+
+    // set game status to true
     if (gameStatus == true) {
+
       // load background 
       image(imgBackground, 0, 0);
 
@@ -109,27 +111,33 @@ public class Sketch extends PApplet {
       if (rightPressed){
         fltPlayerOneX += fltTankSpeedX; 
       }
+      // shoot missle when "fire" button is pressed
       if (fireOne)  {
         image(imgMissileRight, missleXOne + 40, fltPlayerOneY + 50);
           missleXOne += 20;
+          missleYOne = fltPlayerOneY;
+          System.out.println("\nx:"+ missleXOne);
+          System.out.println("y:"+missleYOne);
+          System.out.println("\ntankx:"+ fltPlayerTwoX);
+          System.out.println("tanky:"+fltPlayerTwoY);
+
+          // check if missle goes out the map
           if (missleXOne > 1000) {
             fireOne = false;
-            missleXOne = fltPlayerOneX;
+            missleXOne = fltPlayerOneX;            
           }
-          if (dist(missleXOne + fltMissleWidth, missleYOne + fltMissleHeight, fltPlayerTwoX, fltPlayerTwoY) == fltPlayerTwoX)  {
+
+          // check if missle hits player 
+          if (missleXOne >= fltPlayerTwoX && missleXOne <= fltPlayerTwoX + fltTankTwoWidth && missleYOne >= fltPlayerTwoY - 25 && missleYOne <= fltPlayerTwoY + fltTankeTWoHeight - 20) {
             fltPlayerTwoLives -= 1;
             fireOne = false;
             missleXOne = fltPlayerOneX;
           }
         }
+        // draw tank
+        image(imgTankOne, fltPlayerOneX, fltPlayerOneY);
 
-        line(150, 150, 235, 150);
-        line(150, 150, 150, 222);
-        image(imgMissileLeft, 50, 50);
-        line(55, 50, 55, 75);
-        line(55, 50, 130, 50);
-      image(imgTankOne, fltPlayerOneX, fltPlayerOneY);
-
+      // create player lives and display it
       for (int i = 1; i <= fltPlayerOneLives; i++) {
         fill(233, 66, 245);
         rect(0 + i * 24, 15, 20, 20);   
@@ -154,45 +162,61 @@ public class Sketch extends PApplet {
       if (fireTwo) {
         image(imgMissileLeft, missleXTwo - 40, fltPlayerTwoY + 55);
           missleXTwo -= 20;
+          missleYTwo = fltPlayerTwoY;
+          System.out.println("\nx:"+ missleXTwo);
+          System.out.println("y:"+missleYTwo);
+          System.out.println("\ntankx:"+ fltPlayerOneX);
+          System.out.println("tanky:"+fltPlayerOneY);
+
+          // check if missles goes out the map
           if (missleXTwo < 0) {
             fireTwo = false;
             missleXTwo = fltPlayerTwoX;
           }
-         if (dist(missleXTwo + fltMissleWidth, missleYTwo + fltMissleHeight, fltPlayerOneX, fltPlayerOneY) < fltPlayerOneX) {
+          // check if missle hits player
+          if (missleXTwo >= fltPlayerOneX && missleXTwo <= fltPlayerOneX + fltTankTwoWidth && missleYTwo >= fltPlayerOneY - 25 && missleYTwo <= fltPlayerOneY + fltTankeTWoHeight - 20) {
             fltPlayerOneLives -= 1;
             fireTwo = false;
             missleXTwo = fltPlayerTwoX;
-          } 
-      }
-      // rect(fltPlayerOneX + 50, fltPlayerOneY + 50, 20, 20); // just a square to show actual location 
-      image(imgTankTwo, fltPlayerTwoX, fltPlayerTwoY);
+          }  
+        }
+        // draw tank        
+        image(imgTankTwo, fltPlayerTwoX, fltPlayerTwoY);
 
+
+      // create lives for player and display it 
       for (int i = 1; i <= fltPlayerTwoLives; i++) {
         fill(66, 224, 245);
         rect(885 + i * 24, 15, 20, 20);
         textSize(20);
         fill(255);
-        text("PLAYER 2", 825, 32);
+        text("PLAYER 2", 800, 32);
       }
       // end game when player lives run out
       if (fltPlayerOneLives <= 0 || fltPlayerTwoLives <= 0) {
         gameStatus = false;
       }
     }
+    // display background according to which player won 
     else {
       background(255, 255, 0);
       textSize(70);
       if (fltPlayerOneLives <= 0) {
         fill(0);
-        text("GAME OVER PLAYER 2 WINS", 175, 350);
+        text("GAME OVER", 275, 350);
+        text(" PLAYER 2 WINS", 225, 440);
       }
       else {
         fill(0);
-        text("GAME OVER PLAYER 1 WINS", 175, 350);
+        text("GAME OVER", 275, 350);
+        text(" PLAYER 1 WINS", 225, 440);
       }
     }
   }
-
+    /** handling multiple keys 
+     * create booleans for player one 
+     * create booleans for player two
+    */
     public void keyPressed() { 
 
       // player two booleans
