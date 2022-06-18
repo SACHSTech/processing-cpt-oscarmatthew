@@ -21,8 +21,6 @@ public class Sketch extends PApplet {
   boolean fireOne = false;
   boolean fireTwo = false;
 
-  boolean[] hideMissle = new boolean[25];
-
   // variables for player location 
   float fltPlayerOneX = 105;
   float fltPlayerOneY = 105;
